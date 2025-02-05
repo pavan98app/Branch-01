@@ -1,7 +1,3 @@
-.github/workflows/release.yml
-
-
-
 name: Tag and release
 
 on:
