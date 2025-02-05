@@ -14,8 +14,9 @@ on:
           - patch
 
 permissions:
-  contents: write  # Allows modifying repository contents (tags, releases)
+  contents: write   # Allows modifying repository contents (tags, releases)
   pull-requests: write  # Required for changelog generation
+  actions: write    # Required for modifying actions
 
 jobs:
   create_release:
@@ -32,7 +33,7 @@ jobs:
         id: tag_release
         uses: mathieudutour/github-tag-action@v6.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}  # Uses GitHub Actions token
+          github_token: ${{ secrets.PAT_TOKEN }}  # Use PAT_TOKEN instead of GITHUB_TOKEN
           default_bump: ${{ github.event.inputs.release_type }}
           tag_prefix: v
           default_prerelease_bump: prerelease
@@ -44,28 +45,21 @@ jobs:
       - name: Get New Tag
         run: echo "NEW_TAG=${{ steps.tag_release.outputs.new_tag }}" >> $GITHUB_ENV
 
-      - name: Debug PRs (Optional)
-        run: gh pr list --limit 10 --state merged --json title,number,author
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Generate Changelog
         id: changelog
         uses: mikepenz/release-changelog-builder-action@v4
         with:
           configuration: ".github/changelog-config.json"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
 
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           tag_name: "${{ env.NEW_TAG }}"
-          release_name: "${{ env.NEW_TAG }}"  # No "Release" prefix
-          body: "${{ steps.changelog.outputs.changelog }}"  # Uses formatted changelog
+          release_name: "${{ env.NEW_TAG }}"
+          body: "${{ steps.changelog.outputs.changelog }}"
           draft: false
           prerelease: false
-
-
