@@ -1,4 +1,4 @@
-name: Tag and release
+name: Tag and Release
 
 on:
   workflow_dispatch:
@@ -9,13 +9,13 @@ on:
         default: "patch"
         type: choice
         options:
-        - major
-        - minor
-        - patch
+          - major
+          - minor
+          - patch
 
 permissions:
-  contents: write
-  pull-requests: write
+  contents: write  # Allows modifying repository contents (tags, releases)
+  pull-requests: write  # Required for changelog generation
 
 jobs:
   create_release:
@@ -25,16 +25,21 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0  # Ensures full history is fetched
+          fetch-depth: 0  # Fetch full history to detect previous tags
           ref: jenk-branch
 
       - name: Tag and Release
         id: tag_release
         uses: mathieudutour/github-tag-action@v6.2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}  # Uses GitHub Actions token
           default_bump: ${{ github.event.inputs.release_type }}
           tag_prefix: v
+          default_prerelease_bump: prerelease
+          release_branches: master,main
+          create_annotated_tag: false
+          fetch_all_tags: false
+          dry_run: false
 
       - name: Get New Tag
         run: echo "NEW_TAG=${{ steps.tag_release.outputs.new_tag }}" >> $GITHUB_ENV
