@@ -25,7 +25,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # Ensures full history is fetched
           ref: jenk-branch
 
       - name: Tag and Release
@@ -38,6 +38,11 @@ jobs:
 
       - name: Get New Tag
         run: echo "NEW_TAG=${{ steps.tag_release.outputs.new_tag }}" >> $GITHUB_ENV
+
+      - name: Debug PRs (Optional)
+        run: gh pr list --limit 10 --state merged --json title,number,author
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Changelog
         id: changelog
