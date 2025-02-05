@@ -6,5 +6,6 @@
     }
   ],
   "template": "v{{release}}\nChangelog\nFull Changelog\n\n{{CHANGELOG}}",
-  "pr_template": "- [{{baseRef}}] - {{title}} #{{number}} ({{author}})"
+  "pr_template": "- [{{baseRef}}] - {{title}} #{{number}} ({{author}})",
+  "empty_template": "v{{release}}\nChangelog\nFull Changelog\n\nNo merged pull requests in this release."
 }
