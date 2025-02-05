@@ -1,0 +1,10 @@
+{
+  "categories": [
+    {
+      "title": "Merged pull requests:",
+      "labels": ["*"]
+    }
+  ],
+  "template": "v{{release}}\nChangelog\nFull Changelog\n\n{{CHANGELOG}}",
+  "pr_template": "- {{title}} (#{{number}}) ({{author}})"
+}
