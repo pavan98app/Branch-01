@@ -6,5 +6,5 @@
     }
   ],
   "template": "v{{release}}\nChangelog\nFull Changelog\n\n{{CHANGELOG}}",
-  "pr_template": "- {{title}} (#{{number}}) ({{author}})"
+  "pr_template": "- [{{baseRef}}] - {{title}} #{{number}} ({{author}})"
 }
