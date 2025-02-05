@@ -57,3 +57,5 @@ jobs:
           body: "${{ steps.changelog.outputs.changelog }}"  # Uses formatted changelog
           draft: false
           prerelease: false
+
+
