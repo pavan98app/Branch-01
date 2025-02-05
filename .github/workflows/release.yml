@@ -1,3 +1,7 @@
+.github/workflows/release.yml
+
+
+
 name: Tag and release
 
 on:
@@ -41,21 +45,19 @@ jobs:
 
       - name: Generate Changelog
         id: changelog
-        uses: mikepenz/release-changelog-builder-action@v4
+        uses: janheinrichmerker/action-github-changelog-generator@v2.3
         with:
-          configuration: ".github/changelog-config.json"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          output: './CHANGELOG.md'
 
+         
       - name: Create GitHub Release
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "${{ env.NEW_TAG }}"
-          release_name: "${{ env.NEW_TAG }}"  # No "Release" prefix
-          body: "${{ steps.changelog.outputs.changelog }}"  # Uses formatted changelog
+          release_name: "Release ${{ env.NEW_TAG }}"
+          body: "${{ steps.changelog.outputs.changelog }}"
           draft: false
           prerelease: false
-
-
